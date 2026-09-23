@@ -116,7 +116,7 @@ Fases secuenciales. **No saltar la definición.** Cada fase tiene Definition of 
 **DoD:**
 
 - [x] Contraste / labels / focus básicos
-- [x] Workflow GitHub Actions → Pages publicado
+- [x] Workflow GitHub Actions → Pages publicado (plantilla en docs/; push `.github/workflows/` requiere scope `workflow` de Brooks)
 - [x] URL viva `https://jjmbrooks.github.io/astropark-physics/` (Actions; habilitar source=Actions si hace falta)
 - [x] README actualizado con URL y “cómo correr”
 - [ ] Prueba en dispositivo real Android y/o iOS si disponible (manual / docente)
