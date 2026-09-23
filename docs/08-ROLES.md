@@ -83,3 +83,7 @@ Hasta que Runica esté live: Codelius implementa o deja la tarjeta en borrador s
 | Cómo retomar / ownership de carpetas | `07-HANDOFF.md` |
 | Fases / DoD producto | `06-ROADMAP.md` |
 | Instrucciones cortas para bots | `AGENTS.md` |
+
+## Ejemplo vivo — AstroPark F7
+
+Épica Kanban `t_494ce233` (`[Grok:Codelius]`): upgrade pedagogía + media para **Del Átomo al Universo P1**. Hijos: aguilar `t_e6293466`, disenador `t_3f5fbdea`, storyteller `t_15ce55ef`, director-creativo `t_54c6f50c`, melody `t_b83d2bd3`.

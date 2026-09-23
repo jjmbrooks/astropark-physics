@@ -135,3 +135,21 @@ Paralelismo seguro: ver [`07-HANDOFF.md`](07-HANDOFF.md).
 ## Fuera de roadmap v1
 
 - Cuentas cloud, multiplayer, i18n, Phaser, React, contenido fuera de las 5 atracciones.
+
+## F7 — Pedagogía + media (post-MVP, en curso)
+
+**Marco:** apoyo a clase **CNEYT V. Del Átomo al Universo — primer parcial** (Prepa 42).
+
+**Orquestación Kanban** (parent `t_494ce233`):
+| Perfil | Ticket | Entrega |
+|--------|--------|---------|
+| aguilar | `t_e6293466` | Análisis pedagógico + mapa P1 + backlog |
+| disenador | `t_3f5fbdea` | Auditoría UX + propuesta imgs/anim |
+| storyteller | `t_15ce55ef` | Narrativa / microcopy |
+| director-creativo | `t_54c6f50c` | Art direction + pack aliens |
+| melody | `t_b83d2bd3` | BGM + SFX P0 |
+| Mediateca | (tras lista SFX) | Handoff `[Grok:Mediateca]` → nexia |
+
+**Codelius:** integra un solo repo; codea audio engine / animaciones críticas. Runica: slices mecánicos solo con perfil live + DoD claro.
+
+**DoD F7 (alto nivel):** Doc Aguilar aceptado + backlog en docs + vertical slice (1 atracción con art+audio+copy) en `main`.
