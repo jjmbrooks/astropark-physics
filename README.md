@@ -2,7 +2,13 @@
 
 SPA educativa **100% mobile-first** ambientada en el parque de diversiones del planeta **Xenon-9**. Aliens entrañables enseñan **mecánica clásica** y **astrofísica básica** con atracciones, simuladores y mini-juegos arcade.
 
-> **Estado actual: F1 — shell Xenon-9 live localmente.** Bottom nav + 4 vistas placeholder. Sin sims/juegos/contenido aún. Docs en `docs/` siguen siendo la fuente de verdad.
+> **Estado: F0–F6 implementados.** Atracciones, 4 sims Canvas, 3 juegos, Mi Pase + export. Deploy Pages vía GitHub Actions.
+
+## URL en vivo
+
+**https://jjmbrooks.github.io/astropark-physics/**
+
+Si la URL aún no carga tras el primer push de Actions: activa **Settings → Pages → Source = GitHub Actions** (o corre el comando `gh` documentado abajo).
 
 ## Para quién
 
@@ -11,23 +17,20 @@ SPA educativa **100% mobile-first** ambientada en el parque de diversiones del p
 | Público | Estudiantes de preparatoria (~15–18 años) |
 | Materia | Física: MRU, F=ma, trabajo, masa vs peso, gravedad, Kepler cualitativo |
 | Plataformas | iOS Safari, Android Chrome (ancho mínimo **360px**) |
-| Deploy | Estático: **GitHub Pages** (primario), también Vercel/Netlify |
+| Deploy | Estático: **GitHub Pages** (`base: '/astropark-physics/'`) |
 
-## Stack decidido (bloqueado)
+## Stack (bloqueado)
 
 | Capa | Elección |
 |------|----------|
-| Build | **Vite** (`package.json` name: `astropark-physics`) |
-| UI | HTML + **Tailwind CSS** (plugin Vite en build real; CDN solo para spike temprano) |
-| Lógica | **JavaScript ES6+** módulos nativos — **sin React** salvo que la complejidad lo fuerce |
-| Sims / juegos | **Canvas 2D** primero; evaluar Phaser solo si hace falta después |
-| Routing | Hash router o view switcher simple |
-| Estado | Módulo pequeño + `localStorage` namespaced `astropark.*` |
-| Deploy | GitHub Pages desde `main` → carpeta `dist/` (Actions) o `gh-pages`; `base: '/astropark-physics/'` |
+| Build | **Vite** |
+| UI | HTML + **Tailwind CSS** (plugin Vite) |
+| Lógica | **JavaScript ES6+** — sin React |
+| Sims / juegos | **Canvas 2D** + rAF (mount/unmount limpio) |
+| Routing | Hash router (`#/atracciones`, …) |
+| Estado | `localStorage` namespaced `astropark.*` |
 
-Detalle y ADRs: [`docs/05-DECISIONES.md`](docs/05-DECISIONES.md).
-
-## Cómo correr (F1 shell)
+## Cómo correr
 
 ```bash
 npm install
@@ -36,44 +39,54 @@ npm run build    # sale a dist/
 npm run preview  # previsualiza el build
 ```
 
-**F1 live:** hash router (`#/atracciones`, `#/laboratorio`, `#/arcade`, `#/pase`), tema dark Xenon-9, bottom nav fija. Placeholders only — F2 añade atracciones.
+## Navegación
 
-## Navegación de la app (producto)
-
-Barra inferior fija (bottom nav), 4 pestañas:
-
-1. **Atracciones** — teoría / board de 5 atracciones  
+1. **Atracciones** — board de 5 + detalle (teoría / fórmulas)  
 2. **Laboratorio** — 4 simuladores Canvas  
 3. **Zona Arcade** — 3 mini-juegos  
-4. **Mi Pase** — progreso, estrellas, export de reporte  
+4. **Mi Pase** — progreso, export texto, reset  
 
-UX táctil: thumb-zone, botones ≥ **48×48 px**. Spec: [`docs/02-SPEC-PRODUCTO.md`](docs/02-SPEC-PRODUCTO.md).
+## Contenido (IDs)
 
-## Documentación (léela en orden)
+| Tipo | IDs |
+|------|-----|
+| Atracciones | `zorp`, `grog`, `kiki`, `nebu`, `tiki-tok` |
+| Sims | `sim-zorp-inercia`, `sim-grog-empuje`, `sim-kiki-balanza`, `sim-nebu-caida` |
+| Juegos | `game-zorp-dash`, `game-grog-push`, `game-orbit-hop` |
 
-| # | Archivo | Contenido |
-|---|---------|-----------|
-| 01 | [`docs/01-VISION.md`](docs/01-VISION.md) | Visión, público, plataformas, tono Xenon-9 |
-| 02 | [`docs/02-SPEC-PRODUCTO.md`](docs/02-SPEC-PRODUCTO.md) | UX mobile-first, bottom nav, requisitos táctiles |
-| 03 | [`docs/03-CONTENIDO.md`](docs/03-CONTENIDO.md) | 5 atracciones, fórmulas, sims, 3 juegos |
-| 04 | [`docs/04-ARQUITECTURA.md`](docs/04-ARQUITECTURA.md) | Carpetas, módulos, canvas vs DOM, estado, schema LS |
-| 05 | [`docs/05-DECISIONES.md`](docs/05-DECISIONES.md) | ADRs (Vite, vanilla, Canvas, Pages, ES modules) |
-| 06 | [`docs/06-ROADMAP.md`](docs/06-ROADMAP.md) | Fases F0→F6 con Definition of Done |
-| 07 | [`docs/07-HANDOFF.md`](docs/07-HANDOFF.md) | Cómo retomar / trabajar en paralelo |
+**g Xenon-9 = 7.5 m/s²** (también Tierra 9.8, Luna 1.6, Júpiter 24.8).
 
-Instrucciones para agentes/bots: [`AGENTS.md`](AGENTS.md).
+## Documentación
 
-## Personajes / atracciones (resumen)
+| # | Archivo |
+|---|---------|
+| 01 | [`docs/01-VISION.md`](docs/01-VISION.md) |
+| 02 | [`docs/02-SPEC-PRODUCTO.md`](docs/02-SPEC-PRODUCTO.md) |
+| 03 | [`docs/03-CONTENIDO.md`](docs/03-CONTENIDO.md) |
+| 04 | [`docs/04-ARQUITECTURA.md`](docs/04-ARQUITECTURA.md) |
+| 05 | [`docs/05-DECISIONES.md`](docs/05-DECISIONES.md) |
+| 06 | [`docs/06-ROADMAP.md`](docs/06-ROADMAP.md) |
+| 07 | [`docs/07-HANDOFF.md`](docs/07-HANDOFF.md) |
 
-| Alias | Tema | Concepto |
-|-------|------|----------|
-| **Zorp** | MRU / inercia | Movimiento rectilíneo uniforme |
-| **Grog** | F=ma + trabajo | Fuerza, aceleración, W |
-| **Kiki** | Masa vs peso | m ≠ peso; g local |
-| **Nebu** | Gravedad | Atracción gravitatoria |
-| **Tiki & Tok** | Kepler cualitativo | Órbitas / periodos |
+Agentes: [`AGENTS.md`](AGENTS.md).
 
-Tabla completa: [`docs/03-CONTENIDO.md`](docs/03-CONTENIDO.md).
+## GitHub Pages (Actions)
+
+Workflow: [`.github/workflows/pages.yml`](.github/workflows/pages.yml) — build en push a `main` → `actions/upload-pages-artifact` + `actions/deploy-pages`.
+
+Si Pages no está habilitado con fuente Actions:
+
+```bash
+gh api repos/jjmbrooks/astropark-physics/pages \
+  --method POST \
+  -f build_type=workflow \
+  -f source[branch]=main \
+  -f source[path]=/
+```
+
+O en la UI: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+
+Luego: **Actions → Deploy GitHub Pages → Run workflow** (o push a `main`).
 
 ## Licencia
 
@@ -81,5 +94,5 @@ Tabla completa: [`docs/03-CONTENIDO.md`](docs/03-CONTENIDO.md).
 
 ## Repo
 
-- HTTPS: https://github.com/jjmbrooks/astropark-physics  
-- Clone: `git clone https://github.com/jjmbrooks/astropark-physics.git`
+- https://github.com/jjmbrooks/astropark-physics  
+- `git clone https://github.com/jjmbrooks/astropark-physics.git`

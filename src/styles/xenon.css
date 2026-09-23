@@ -537,3 +537,34 @@ body {
   font-size: 0.75rem;
   resize: vertical;
 }
+
+/* ——— F6 a11y ——— */
+:focus-visible {
+  outline: 2px solid var(--color-xenon-cyan);
+  outline-offset: 2px;
+}
+
+a.activity-card:focus-visible,
+button.attr-card:focus-visible {
+  outline: 2px solid var(--color-xenon-cyan);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Ensure muted text keeps readable contrast on dark surfaces */
+.text-muted,
+.view-header__subtitle,
+.activity-card__sub,
+.attr-card__concept {
+  color: #a8b0cc;
+}

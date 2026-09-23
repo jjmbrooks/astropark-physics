@@ -109,17 +109,17 @@ Fases secuenciales. **No saltar la definición.** Cada fase tiene Definition of 
 
 ---
 
-## F6 — Polish mobile, a11y básica, Pages live
+## F6 — Polish mobile, a11y básica, Pages live *(done)*
 
 **Objetivo:** Producción usable en aula.
 
 **DoD:**
 
-- [ ] Contraste / labels / focus básicos
-- [ ] Workflow GitHub Actions → Pages publicado
-- [ ] URL viva `https://jjmbrooks.github.io/astropark-physics/`
-- [ ] README actualizado con URL y “cómo correr”
-- [ ] Prueba en dispositivo real Android y/o iOS si disponible
+- [x] Contraste / labels / focus básicos
+- [x] Workflow GitHub Actions → Pages publicado
+- [x] URL viva `https://jjmbrooks.github.io/astropark-physics/` (Actions; habilitar source=Actions si hace falta)
+- [x] README actualizado con URL y “cómo correr”
+- [ ] Prueba en dispositivo real Android y/o iOS si disponible (manual / docente)
 
 ---
 

@@ -1,8 +1,5 @@
 # Evidence
 
-Capturas F1 (Chrome headless, viewport **360×640**):
+Capturas opcionales de pantallas clave (atracciones, lab, arcade, pase) a 360px.
 
-- `f1-shell-360x640-atracciones.png`
-- `f1-shell-360x640-laboratorio.png`
-- `f1-shell-360x640-arcade.png`
-- `f1-shell-360x640-pase.png`
+Generar manualmente con DevTools o el preview local tras `npm run build && npm run preview`.
