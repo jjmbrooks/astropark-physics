@@ -72,21 +72,30 @@ Agentes: [`AGENTS.md`](AGENTS.md).
 
 ## GitHub Pages (Actions)
 
-Workflow: [`.github/workflows/pages.yml`](.github/workflows/pages.yml) — build en push a `main` → `actions/upload-pages-artifact` + `actions/deploy-pages`.
+**Pages ya está habilitado** (`build_type=workflow`) → URL esperada:
+https://jjmbrooks.github.io/astropark-physics/
 
-Si Pages no está habilitado con fuente Actions:
+El workflow oficial está en plantilla (el token del bot **no** tiene scope `workflow` para pushear `.github/workflows/`):
+
+- Plantilla: [`docs/github-pages.workflow.yml`](docs/github-pages.workflow.yml)
+
+### Brooks — activar el deploy (una vez)
 
 ```bash
-gh api repos/jjmbrooks/astropark-physics/pages \
-  --method POST \
-  -f build_type=workflow \
-  -f source[branch]=main \
-  -f source[path]=/
+# 1) Ampliar scope del token gh
+gh auth refresh -h github.com -s workflow
+
+# 2) Instalar el workflow y pushear
+mkdir -p .github/workflows
+cp docs/github-pages.workflow.yml .github/workflows/pages.yml
+git add .github/workflows/pages.yml
+git commit -m "F6: GitHub Pages Actions workflow"
+git push origin main
 ```
 
-O en la UI: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+Alternativa UI: **Settings → Pages → Source: GitHub Actions**, luego crear `.github/workflows/pages.yml` pegando el contenido de `docs/github-pages.workflow.yml`.
 
-Luego: **Actions → Deploy GitHub Pages → Run workflow** (o push a `main`).
+Tras el primer run verde de **Deploy GitHub Pages**, la URL queda viva.
 
 ## Licencia
 
