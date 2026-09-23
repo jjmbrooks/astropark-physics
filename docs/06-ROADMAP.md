@@ -4,7 +4,7 @@ Fases secuenciales. **No saltar la definición.** Cada fase tiene Definition of 
 
 ---
 
-## F0 — Docs + repo skeleton *(ESTA TAREA)*
+## F0 — Docs + repo skeleton *(done)*
 
 **Objetivo:** Repo público con documentación completa y scaffold mínimo (sin feature SPA).
 
@@ -21,7 +21,7 @@ Fases secuenciales. **No saltar la definición.** Cada fase tiene Definition of 
 
 ---
 
-## F1 — Shell app
+## F1 — Shell app *(done)*
 
 **Objetivo:** App shell Xenon-9 con bottom nav y 4 vistas vacías.
 
@@ -35,10 +35,10 @@ Fases secuenciales. **No saltar la definición.** Cada fase tiene Definition of 
 
 **DoD:**
 
-- [ ] `npm run dev` y `npm run build` OK
-- [ ] 4 tabs cambian de vista
-- [ ] Screenshot / prueba manual 360×640
-- [ ] Sin lógica de sims/juegos aún
+- [x] `npm run dev` y `npm run build` OK
+- [x] 4 tabs cambian de vista
+- [x] Screenshot / prueba manual 360×640
+- [x] Sin lógica de sims/juegos aún
 
 **Ownership sugerido:** `src/router/`, `src/views/`, `src/styles/`
 

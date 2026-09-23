@@ -2,7 +2,7 @@
 
 SPA educativa **100% mobile-first** ambientada en el parque de diversiones del planeta **Xenon-9**. Aliens entrañables enseñan **mecánica clásica** y **astrofísica básica** con atracciones, simuladores y mini-juegos arcade.
 
-> **Estado actual: F0 — definición + esqueleto.** No hay feature SPA aún. La documentación en `docs/` es la fuente de verdad.
+> **Estado actual: F1 — shell Xenon-9 live localmente.** Bottom nav + 4 vistas placeholder. Sin sims/juegos/contenido aún. Docs en `docs/` siguen siendo la fuente de verdad.
 
 ## Para quién
 
@@ -27,9 +27,7 @@ SPA educativa **100% mobile-first** ambientada en el parque de diversiones del p
 
 Detalle y ADRs: [`docs/05-DECISIONES.md`](docs/05-DECISIONES.md).
 
-## Cómo correr (placeholder F0)
-
-Cuando exista `node_modules` (F1+):
+## Cómo correr (F1 shell)
 
 ```bash
 npm install
@@ -38,7 +36,7 @@ npm run build    # sale a dist/
 npm run preview  # previsualiza el build
 ```
 
-Hoy `src/main.js` solo imprime un mensaje en consola. **No implementes UI de producto en F0.**
+**F1 live:** hash router (`#/atracciones`, `#/laboratorio`, `#/arcade`, `#/pase`), tema dark Xenon-9, bottom nav fija. Placeholders only — F2 añade atracciones.
 
 ## Navegación de la app (producto)
 
