@@ -65,16 +65,16 @@ Fases secuenciales. **No saltar la definición.** Cada fase tiene Definition of 
 
 ---
 
-## F3 — Laboratorio (primeros 2 sims)
+## F3 — Laboratorio (primeros 2 sims) *(done)*
 
 **Objetivo:** `sim-zorp-inercia` + `sim-grog-empuje` jugables en Canvas 2D.
 
 **DoD:**
 
-- [ ] Lista Laboratorio muestra al menos 2 sims activos
-- [ ] Mount/unmount limpio (sin rAF zombie al cambiar de tab)
-- [ ] Controles táctiles usables; estrellas o score se guardan
-- [ ] Touch/pointer OK en Chrome móvil emulado
+- [x] Lista Laboratorio muestra al menos 2 sims activos
+- [x] Mount/unmount limpio (sin rAF zombie al cambiar de tab)
+- [x] Controles táctiles usables; estrellas o score se guardan
+- [x] Touch/pointer OK en Chrome móvil emulado
 
 **Ownership:** `src/modules/laboratorio/`
 
