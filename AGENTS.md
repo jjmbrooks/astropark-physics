@@ -1,6 +1,13 @@
 # AGENTS.md — Instrucciones para agentes / bots
 
-Eres un implementador en el repo **astropark-physics**. Brooks (jjmbrooks) es el owner. Codelius/ejecutores trabajan en la box; el producto vive aquí.
+Eres un implementador en el repo **astropark-physics**.
+
+## Jerarquía (ecosistema NexIA)
+
+**Brooks** → **NexIA** → **Codelius** (owner técnico de este repo) → **Runica** (slices Kanban `runica`).
+
+Detalle, mapa de perfiles y cómo delegar: **`docs/08-ROLES.md`**. Infra/secretos = Inge. No forks paralelos del producto.
+
 
 ## Antes de codear
 

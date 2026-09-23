@@ -10,6 +10,11 @@ SPA educativa **100% mobile-first** ambientada en el parque de diversiones del p
 
 Si la URL aún no carga tras el primer push de Actions: activa **Settings → Pages → Source = GitHub Actions** (o corre el comando `gh` documentado abajo).
 
+
+## Roles y orquestación
+
+Jerarquía **Brooks → NexIA → Codelius → Runica**. Mapa de perfiles (aguilar, disenador, storyteller, creativo/melody, Mediateca, Inge) y delegación Kanban: [`docs/08-ROLES.md`](docs/08-ROLES.md).
+
 ## Para quién
 
 | Aspecto | Valor |

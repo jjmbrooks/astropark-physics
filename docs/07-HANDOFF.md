@@ -74,3 +74,11 @@ Todo lo demás debe resolverse con los docs.
 
 - GitHub: https://github.com/jjmbrooks/astropark-physics
 - Owner: **jjmbrooks** (Jhonatan Jesús Martínez Brooks)
+
+## Orquestación NexIA / Runica
+
+Roles, jerarquía y plantilla de tarjetas Kanban: **`08-ROLES.md`**.
+
+- Owner técnico del código: **Codelius**.
+- Slices mecánicos: assignee Kanban **`runica`** (banda L), review/merge Codelius.
+- Especialistas (aguilar, disenador, storyteller, creativo/melody, Mediateca) entregan artefactos; no abren forks del producto.
