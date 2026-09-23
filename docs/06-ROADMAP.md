@@ -80,15 +80,15 @@ Fases secuenciales. **No saltar la definición.** Cada fase tiene Definition of 
 
 ---
 
-## F4 — Resto de sims + Arcade juego 1
+## F4 — Resto de sims + Arcade juego 1 *(done)*
 
 **Objetivo:** `sim-kiki-balanza`, `sim-nebu-caida` + primer juego (`game-zorp-dash` por defecto).
 
 **DoD:**
 
-- [ ] 4 sims listados; los 4 corren
-- [ ] 1 juego arcade completable con score/★ en LS
-- [ ] Navegación lista ↔ play estable
+- [x] 4 sims listados; los 4 corren
+- [x] 1 juego arcade completable con score/★ en LS
+- [x] Navegación lista ↔ play estable
 
 **Ownership:** `laboratorio/` + `arcade/` (juego 1)
 

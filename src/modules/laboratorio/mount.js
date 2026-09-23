@@ -1,6 +1,8 @@
 import { SIMS, getSim } from './catalog.js';
 import { mountZorpInercia } from './sims/zorp-inercia.js';
 import { mountGrogEmpuje } from './sims/grog-empuje.js';
+import { mountKikiBalanza } from './sims/kiki-balanza.js';
+import { mountNebuCaida } from './sims/nebu-caida.js';
 import { navigate } from '../../router/index.js';
 import { getProgress } from '../../state/index.js';
 
@@ -8,6 +10,8 @@ import { getProgress } from '../../state/index.js';
 export const MOUNTERS = {
   'sim-zorp-inercia': mountZorpInercia,
   'sim-grog-empuje': mountGrogEmpuje,
+  'sim-kiki-balanza': mountKikiBalanza,
+  'sim-nebu-caida': mountNebuCaida,
 };
 
 /**
