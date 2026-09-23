@@ -1,5 +1,5 @@
-# `src/state/`
+# state/
 
-API pequeña sobre `localStorage` keys `astropark.*`.
+API `astropark.*` localStorage — ver `docs/04-ARQUITECTURA.md`.
 
-Schema y shape: `docs/04-ARQUITECTURA.md`. Versionar y migrar; no escribir claves sin prefijo.
+Export: `getProgress`, `markAttractionRead`, `updateSim`, `updateGame`, `resetProgress`, `getProfile`, `setDisplayName`.

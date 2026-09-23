@@ -44,7 +44,7 @@ Fases secuenciales. **No saltar la definición.** Cada fase tiene Definition of 
 
 ---
 
-## F2 — Atracciones
+## F2 — Atracciones *(done)*
 
 **Objetivo:** Board de 5 cards + páginas de detalle (teoría + fórmulas).
 
@@ -57,9 +57,9 @@ Fases secuenciales. **No saltar la definición.** Cada fase tiene Definition of 
 
 **DoD:**
 
-- [ ] 5 cards visibles y navegables
-- [ ] Fórmulas correctas (sin inventar temas)
-- [ ] Progreso `attractions.*.read` persiste en refresh
+- [x] 5 cards visibles y navegables
+- [x] Fórmulas correctas (sin inventar temas)
+- [x] Progreso `attractions.*.read` persiste en refresh
 
 **Ownership:** `src/modules/atracciones/`, `src/state/` (parcial)
 

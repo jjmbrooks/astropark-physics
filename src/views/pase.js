@@ -1,4 +1,7 @@
-/** Placeholder view — Mi Pase (F1 shell only). */
+/**
+ * Placeholder F2 — Mi Pase completo en F5.
+ * @returns {{ el: HTMLElement, destroy: () => void }}
+ */
 export function renderPase() {
   const el = document.createElement('div');
   el.className = 'view view--pase';
@@ -9,9 +12,9 @@ export function renderPase() {
     </header>
     <div class="view-body">
       <div class="placeholder-card">
-        <p><strong>Placeholder F1.</strong> Estrellas, export y reset llegarán más adelante. Sin localStorage aún.</p>
+        <p><strong>Próximamente.</strong> Estrellas, export y reset. El progreso de atracciones ya se guarda en localStorage.</p>
       </div>
     </div>
   `;
-  return el;
+  return { el, destroy() {} };
 }

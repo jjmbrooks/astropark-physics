@@ -1,4 +1,7 @@
-/** Placeholder view — Laboratorio (F1 shell only). */
+/**
+ * Placeholder F2 — lista real llega en F3.
+ * @returns {{ el: HTMLElement, destroy: () => void }}
+ */
 export function renderLaboratorio() {
   const el = document.createElement('div');
   el.className = 'view view--laboratorio';
@@ -9,9 +12,9 @@ export function renderLaboratorio() {
     </header>
     <div class="view-body">
       <div class="placeholder-card">
-        <p><strong>Placeholder F1.</strong> Lista de simuladores. Sin sims ni canvas todavía.</p>
+        <p><strong>Próximamente.</strong> Lista de simuladores. Los CTAs de atracciones ya apuntan a las rutas del lab.</p>
       </div>
     </div>
   `;
-  return el;
+  return { el, destroy() {} };
 }

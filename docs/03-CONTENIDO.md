@@ -32,7 +32,7 @@ Fuente de verdad para atracciones, fórmulas, simuladores y juegos. Un bot imple
 
 - **Historia:** Kiki se pesa en Xenon-9 vs Tierra vs Luna; la **masa** no cambia, el **peso** sí.
 - **Objetivos:** \( P = mg \); \( g \) depende del cuerpo celeste; masa en kg, peso en N.
-- **Teoría UI:** tabla \( g \) aproximada (Tierra 9.8, Luna 1.6, Xenon-9 valor ficticio documentado en el sim, p. ej. 12 o 7 — **fijar en F3** y anotar aquí).
+- **Teoría UI:** tabla \( g \) aproximada — **Tierra 9.8**, **Luna 1.6**, **Xenon-9 = 7.5 m/s²** (ficticio, fijado), **Júpiter 24.8**. Documentado también en el sim de balanza.
 - **Errores comunes:** “peso = masa”; usar kg como unidad de peso.
 
 #### 4. Nebu — Gravedad

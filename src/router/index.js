@@ -1,9 +1,13 @@
 /**
  * Hash router (ADR-004).
- * Routes: #/ | #/atracciones | #/laboratorio | #/arcade | #/pase
+ * Routes:
+ *   #/atracciones | #/atracciones/:slug
+ *   #/laboratorio | #/laboratorio/:simId
+ *   #/arcade | #/arcade/:gameId
+ *   #/pase
  */
 
-const ROUTES = {
+const SECTIONS = {
   atracciones: 'atracciones',
   laboratorio: 'laboratorio',
   arcade: 'arcade',
@@ -11,26 +15,42 @@ const ROUTES = {
 };
 
 /**
- * Parse location.hash → route id.
- * @returns {'atracciones'|'laboratorio'|'arcade'|'pase'}
+ * @typedef {{ section: string, param: string|null, path: string }} RouteInfo
  */
-export function getRoute() {
+
+/**
+ * Parse location.hash.
+ * @returns {RouteInfo}
+ */
+export function getRouteInfo() {
   const raw = (location.hash || '').replace(/^#\/?/, '').trim();
-  const segment = raw.split('/')[0] || '';
-  if (!segment || segment === ROUTES.atracciones) return ROUTES.atracciones;
-  if (segment === ROUTES.laboratorio) return ROUTES.laboratorio;
-  if (segment === ROUTES.arcade) return ROUTES.arcade;
-  if (segment === ROUTES.pase) return ROUTES.pase;
-  return ROUTES.atracciones;
+  const parts = raw.split('/').filter(Boolean);
+  let section = parts[0] || SECTIONS.atracciones;
+  if (!Object.values(SECTIONS).includes(section)) {
+    section = SECTIONS.atracciones;
+  }
+  const param = parts[1] || null;
+  return {
+    section,
+    param,
+    path: parts.length ? parts.join('/') : section,
+  };
+}
+
+/** @returns {string} section id for bottom nav */
+export function getRoute() {
+  return getRouteInfo().section;
 }
 
 /**
- * Navigate by setting hash (no full reload).
- * @param {string} routeId
+ * Navigate by hash path (e.g. 'atracciones/zorp', 'laboratorio/sim-zorp-inercia').
+ * @param {string} path
  */
-export function navigate(routeId) {
-  const id = ROUTES[routeId] || ROUTES.atracciones;
-  const next = `#/${id}`;
+export function navigate(path) {
+  const clean = String(path || '')
+    .replace(/^#\/?/, '')
+    .replace(/^\//, '');
+  const next = `#/${clean || SECTIONS.atracciones}`;
   if (location.hash === next) {
     window.dispatchEvent(new HashChangeEvent('hashchange'));
     return;
@@ -39,13 +59,13 @@ export function navigate(routeId) {
 }
 
 /**
- * Subscribe to hash changes. Returns unsubscribe.
- * @param {(route: string) => void} listener
+ * @param {(info: RouteInfo) => void} listener
+ * @returns {() => void}
  */
 export function onRouteChange(listener) {
-  const handler = () => listener(getRoute());
+  const handler = () => listener(getRouteInfo());
   window.addEventListener('hashchange', handler);
   return () => window.removeEventListener('hashchange', handler);
 }
 
-export { ROUTES };
+export { SECTIONS as ROUTES };

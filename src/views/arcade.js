@@ -1,4 +1,7 @@
-/** Placeholder view — Zona Arcade (F1 shell only). */
+/**
+ * Placeholder F2 — juegos llegan en F4–F5.
+ * @returns {{ el: HTMLElement, destroy: () => void }}
+ */
 export function renderArcade() {
   const el = document.createElement('div');
   el.className = 'view view--arcade';
@@ -9,9 +12,9 @@ export function renderArcade() {
     </header>
     <div class="view-body">
       <div class="placeholder-card">
-        <p><strong>Placeholder F1.</strong> Aquí irán los 3 juegos arcade. Solo shell por ahora.</p>
+        <p><strong>Próximamente.</strong> Aquí irán los 3 juegos arcade.</p>
       </div>
     </div>
   `;
-  return el;
+  return { el, destroy() {} };
 }
