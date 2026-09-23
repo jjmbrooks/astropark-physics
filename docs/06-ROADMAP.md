@@ -94,16 +94,16 @@ Fases secuenciales. **No saltar la definición.** Cada fase tiene Definition of 
 
 ---
 
-## F5 — Juegos 2–3 + Mi Pase + export
+## F5 — Juegos 2–3 + Mi Pase + export *(done)*
 
 **Objetivo:** `game-grog-push`, `game-orbit-hop`; vista Mi Pase completa; export reporte.
 
 **DoD:**
 
-- [ ] 3 juegos jugables
-- [ ] Mi Pase muestra progreso agregado
-- [ ] Export texto (copiar) funciona; QR opcional pero deseable
-- [ ] Reset progreso con confirmación
+- [x] 3 juegos jugables
+- [x] Mi Pase muestra progreso agregado
+- [x] Export texto (copiar) funciona; QR opcional pero deseable
+- [x] Reset progreso con confirmación
 
 **Ownership:** `arcade/`, `pase/`, `state/`
 

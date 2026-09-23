@@ -1,11 +1,15 @@
 import { GAMES, getGame } from './catalog.js';
 import { mountZorpDash } from './games/zorp-dash.js';
+import { mountGrogPush } from './games/grog-push.js';
+import { mountOrbitHop } from './games/orbit-hop.js';
 import { navigate } from '../../router/index.js';
 import { getProgress } from '../../state/index.js';
 
 /** @type {Record<string, (el: HTMLElement) => () => void>} */
 export const GAME_MOUNTERS = {
   'game-zorp-dash': mountZorpDash,
+  'game-grog-push': mountGrogPush,
+  'game-orbit-hop': mountOrbitHop,
 };
 
 export function registerGame(id, fn) {
