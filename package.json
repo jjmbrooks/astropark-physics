@@ -1,0 +1,15 @@
+{
+  "name": "astropark-physics",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "AstroPark Physics — SPA educativa mobile-first (Prepa / mecánica y astrofísica básica)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.2.0"
+  }
+}
