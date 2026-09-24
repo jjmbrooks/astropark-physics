@@ -16,6 +16,7 @@ const SIM_IDS = [
   'sim-grog-empuje',
   'sim-kiki-balanza',
   'sim-nebu-caida',
+  'sim-par-accion-reaccion',
 ];
 const GAME_IDS = ['game-zorp-dash', 'game-grog-push', 'game-orbit-hop'];
 
@@ -47,7 +48,13 @@ function defaultProfile() {
 }
 
 function defaultSettings() {
-  return { reducedMotion: false };
+  return {
+    reducedMotion: false,
+    soundEnabled: false,
+    sfxVolume: 1,
+    bgmVolume: 0.55,
+    welcomeDismissed: false,
+  };
 }
 
 function readJSON(key, fallback) {
@@ -149,8 +156,25 @@ export function setDisplayName(name) {
 export function getSettings() {
   ensureVersion();
   const s = readJSON(KEYS.settings, null);
-  if (!s || typeof s !== 'object') return defaultSettings();
-  return { reducedMotion: Boolean(s.reducedMotion) };
+  const base = defaultSettings();
+  if (!s || typeof s !== 'object') return base;
+  return {
+    reducedMotion: Boolean(s.reducedMotion),
+    soundEnabled: Boolean(s.soundEnabled),
+    sfxVolume: typeof s.sfxVolume === 'number' ? s.sfxVolume : base.sfxVolume,
+    bgmVolume: typeof s.bgmVolume === 'number' ? s.bgmVolume : base.bgmVolume,
+    welcomeDismissed: Boolean(s.welcomeDismissed),
+  };
+}
+
+/**
+ * @param {Partial<ReturnType<typeof defaultSettings>>} patch
+ */
+export function updateSettings(patch) {
+  const cur = getSettings();
+  const next = { ...cur, ...patch };
+  writeJSON(KEYS.settings, next);
+  return next;
 }
 
 export function markAttractionRead(slug) {
