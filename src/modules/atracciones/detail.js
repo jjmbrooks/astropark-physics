@@ -1,6 +1,7 @@
-import { getAttraction } from './data.js';
+import { getAttraction, bustUrl, poseUrl } from './data.js';
 import { getProgress, markAttractionRead } from '../../state/index.js';
 import { navigate } from '../../router/index.js';
+import { playTap, playPortal } from '../../audio/engine.js';
 
 /**
  * Detalle de atracción.
@@ -18,13 +19,14 @@ export function renderAttractionDetail(slug) {
         <button type="button" class="btn-back" data-back>← Atracciones</button>
         <h1 class="view-header__title">No encontrada</h1>
       </header>
-      <div class="view-body"><p class="text-muted">Esa atracción no existe.</p></div>
+      <div class="view-body">
+        <p class="text-muted">Esa atracción no existe en Xenon-9. Vuelve al mapa del parque.</p>
+      </div>
     `;
     el.querySelector('[data-back]')?.addEventListener('click', () => navigate('atracciones'));
     return { el, destroy() {} };
   }
 
-  // Marcar leída al abrir detalle
   markAttractionRead(a.slug);
   const progress = getProgress();
   const p = progress.attractions[a.slug];
@@ -42,24 +44,38 @@ export function renderAttractionDetail(slug) {
     .join('');
 
   const labCta = a.labId
-    ? `<a class="btn btn-primary" href="#/laboratorio/${a.labId}">Probar sim</a>`
+    ? `<a class="btn btn-primary" href="#/laboratorio/${a.labId}" data-cta>Probar sim</a>`
+    : '';
+  const labExtra = a.labExtraId
+    ? `<a class="btn btn-secondary" href="#/laboratorio/${a.labExtraId}" data-cta>Par acción-reacción</a>`
     : '';
   const arcadeCta = a.arcadeId
-    ? `<a class="btn btn-secondary" href="#/arcade/${a.arcadeId}">Jugar arcade</a>`
+    ? `<a class="btn btn-secondary" href="#/arcade/${a.arcadeId}" data-cta>Jugar arcade</a>`
     : '';
 
+  const bust = bustUrl(a.slug, 256);
+  const pose = poseUrl(a.slug, 'accion');
+
+  el.style.setProperty('--accent', a.color);
+
   el.innerHTML = `
-    <header class="view-header">
+    <header class="view-header" style="border-bottom-color: color-mix(in srgb, var(--accent) 45%, transparent)">
       <button type="button" class="btn-back" data-back aria-label="Volver a atracciones">← Atracciones</button>
-      <h1 class="view-header__title">
-        <span aria-hidden="true">${a.emoji}</span> ${escapeHtml(a.alien)}
+      <h1 class="view-header__title view-header__title--with-bust">
+        <img class="detail-bust" src="${bust}" width="64" height="64"
+          alt="${escapeHtml(a.alien)}, alien del parque, atracción de ${escapeHtml(a.concept)}" />
+        ${escapeHtml(a.alien)}
       </h1>
       <p class="view-header__subtitle">${escapeHtml(a.name)} · ${escapeHtml(a.concept)}</p>
     </header>
     <div class="view-body attr-detail__body">
-      <section class="panel">
-        <h2 class="panel__title">Historia</h2>
-        <p class="theory-p">${escapeHtml(a.story)}</p>
+      <section class="panel panel--pose">
+        <img class="detail-pose" src="${pose}" width="220" height="293" alt=""
+          loading="lazy" decoding="async" />
+        <div>
+          <h2 class="panel__title">Historia</h2>
+          <p class="theory-p">${escapeHtml(a.story)}</p>
+        </div>
       </section>
 
       <section class="panel">
@@ -84,13 +100,23 @@ export function renderAttractionDetail(slug) {
           ${p.read ? '✓ Marcada como leída' : 'Sin marcar'}
         </p>
         <button type="button" class="btn btn-ghost" data-mark-read>Marcar como leída</button>
-        <div class="cta-row">${labCta}${arcadeCta}</div>
+        <div class="cta-row">${labCta}${labExtra}${arcadeCta}</div>
       </section>
     </div>
   `;
 
-  el.querySelector('[data-back]')?.addEventListener('click', () => navigate('atracciones'));
+  el.querySelector('[data-back]')?.addEventListener('click', () => {
+    playTap();
+    navigate('atracciones');
+  });
+  el.querySelectorAll('[data-cta]').forEach((n) =>
+    n.addEventListener('click', () => {
+      playTap();
+      playPortal();
+    }),
+  );
   el.querySelector('[data-mark-read]')?.addEventListener('click', () => {
+    playTap();
     markAttractionRead(a.slug);
     const badge = el.querySelector('[data-read-badge]');
     if (badge) {

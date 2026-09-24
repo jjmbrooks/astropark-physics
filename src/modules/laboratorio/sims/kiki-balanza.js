@@ -20,10 +20,10 @@ export function mountKikiBalanza(container) {
           <label for="kiki-planet">Planeta (g)</label>
           <select id="kiki-planet">
             ${planets
-              .map(
-                ([key, p]) =>
-                  `<option value="${key}" ${key === 'xenon9' ? 'selected' : ''}>${p.label} · g=${p.g} m/s²</option>`,
-              )
+              .map(([key, p]) => {
+                const fic = p.fictional ? ' · dato ficticio' : '';
+                return `<option value="${key}" ${key === 'xenon9' ? 'selected' : ''}>${p.label} · g=${p.g} m/s²${fic}</option>`;
+              })
               .join('')}
           </select>
         </div>
@@ -44,7 +44,7 @@ export function mountKikiBalanza(container) {
         <div class="sim-actions">
           <button type="button" class="btn btn-primary" data-check>Comprobar</button>
         </div>
-        <p class="text-muted" data-hint>P = m·g. En Xenon-9, g = 7.5 m/s². Masa ≠ peso.</p>
+        <p class="text-muted" data-hint>P = m·g. En Xenon-9, g = 7.5 m/s² <span class="badge badge--fictional">dato ficticio</span>. Masa ≠ peso.</p>
         <div class="stars-award" data-stars aria-live="polite"></div>
       </div>
     </div>
@@ -110,7 +110,7 @@ export function mountKikiBalanza(container) {
     const w = canvas.clientWidth;
     const h = canvas.clientHeight;
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = '#070b16';
+    ctx.fillStyle = '#0B1020';
     ctx.fillRect(0, 0, w, h);
 
     // planet circle

@@ -3,6 +3,7 @@ import { mountZorpInercia } from './sims/zorp-inercia.js';
 import { mountGrogEmpuje } from './sims/grog-empuje.js';
 import { mountKikiBalanza } from './sims/kiki-balanza.js';
 import { mountNebuCaida } from './sims/nebu-caida.js';
+import { mountParAccionReaccion } from './sims/par-accion-reaccion.js';
 import { navigate } from '../../router/index.js';
 import { getProgress } from '../../state/index.js';
 
@@ -12,6 +13,7 @@ export const MOUNTERS = {
   'sim-grog-empuje': mountGrogEmpuje,
   'sim-kiki-balanza': mountKikiBalanza,
   'sim-nebu-caida': mountNebuCaida,
+  'sim-par-accion-reaccion': mountParAccionReaccion,
 };
 
 /**
@@ -50,10 +52,17 @@ export function renderSimView(id) {
   const progress = getProgress();
   const stars = progress.sims[id]?.stars || 0;
 
+  const base = import.meta.env.BASE_URL || '/';
+  const bust = meta.slug
+    ? `${base}assets/aliens/busto-${meta.slug}-256.webp`
+    : '';
   el.innerHTML = `
     <header class="view-header">
       <button type="button" class="btn-back" data-back aria-label="Volver al laboratorio">← Laboratorio</button>
-      <h1 class="view-header__title"><span aria-hidden="true">${meta.emoji}</span> ${meta.name}</h1>
+      <h1 class="view-header__title view-header__title--with-bust">
+        ${bust ? `<img class="detail-bust" src="${bust}" width="48" height="48" alt="${meta.alien}" />` : `<span aria-hidden="true">${meta.emoji}</span>`}
+        ${meta.name}
+      </h1>
       <p class="view-header__subtitle">${meta.alien} · ${stars ? '★'.repeat(stars) + '☆'.repeat(3 - stars) : 'Sin estrellas aún'}</p>
     </header>
     <div class="view-body" data-mount></div>
@@ -87,6 +96,7 @@ export function renderLabList() {
     <div class="view-body"><div class="activity-list" data-list></div></div>
   `;
   const list = el.querySelector('[data-list]');
+  const base = import.meta.env.BASE_URL || '/';
   for (const s of SIMS) {
     const p = progress.sims[s.id] || { stars: 0 };
     const ready = Boolean(MOUNTERS[s.id]);
@@ -94,15 +104,23 @@ export function renderLabList() {
     if (ready) card.href = `#/laboratorio/${s.id}`;
     card.className = 'activity-card';
     card.setAttribute('aria-label', `${s.name}. ${ready ? 'Abrir' : 'Próximamente'}`);
+    const thumb = `${base}assets/thumbs/${s.id}.webp`;
+    const bustSlug = s.slug || 'zorp';
     card.innerHTML = `
-      <span class="activity-card__icon" aria-hidden="true">${s.emoji}</span>
+      <span class="activity-card__thumb" aria-hidden="true">
+        <img src="${thumb}" width="96" height="64" alt="" loading="lazy" decoding="async"
+          onerror="this.style.display='none';this.parentElement.textContent='${s.emoji}'" />
+      </span>
       <span class="activity-card__body">
         <span class="activity-card__title">${s.name}</span>
         <span class="activity-card__sub">${s.blurb}</span>
         <span class="activity-card__sub">${ready ? (p.stars ? '★'.repeat(p.stars) + '☆'.repeat(3 - p.stars) : 'Jugar') : 'Próximamente'}</span>
       </span>
     `;
-    if (!ready) card.style.opacity = '0.55';
+    if (!ready) {
+      card.classList.add('activity-card--locked');
+      card.insertAdjacentHTML('beforeend', '<span class="activity-card__lock" aria-hidden="true">🔒</span>');
+    }
     list.appendChild(card);
   }
   return { el, destroy() {} };

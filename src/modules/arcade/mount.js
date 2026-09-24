@@ -74,6 +74,7 @@ export function renderArcadeList() {
     <div class="view-body"><div class="activity-list" data-list></div></div>
   `;
   const list = el.querySelector('[data-list]');
+  const base = import.meta.env.BASE_URL || '/';
   for (const g of GAMES) {
     const p = progress.games[g.id] || { stars: 0, bestScore: 0 };
     const ready = Boolean(GAME_MOUNTERS[g.id]);
@@ -81,8 +82,11 @@ export function renderArcadeList() {
     if (ready) card.href = `#/arcade/${g.id}`;
     card.className = 'activity-card';
     card.setAttribute('aria-label', `${g.name}. ${ready ? 'Jugar' : 'Próximamente'}`);
+    const thumb = `${base}assets/thumbs/${g.id}.webp`;
     card.innerHTML = `
-      <span class="activity-card__icon" aria-hidden="true">${g.emoji}</span>
+      <span class="activity-card__thumb" aria-hidden="true">
+        <img src="${thumb}" width="96" height="64" alt="" loading="lazy" decoding="async" />
+      </span>
       <span class="activity-card__body">
         <span class="activity-card__title">${g.name}</span>
         <span class="activity-card__sub">${g.blurb}</span>
@@ -95,7 +99,7 @@ export function renderArcadeList() {
         }</span>
       </span>
     `;
-    if (!ready) card.style.opacity = '0.55';
+    if (!ready) card.classList.add('activity-card--locked');
     list.appendChild(card);
   }
   return { el, destroy() {} };

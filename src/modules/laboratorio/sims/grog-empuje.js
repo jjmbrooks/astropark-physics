@@ -123,7 +123,7 @@ export function mountGrogEmpuje(container) {
     const w = canvas.clientWidth;
     const h = canvas.clientHeight;
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = '#070b16';
+    ctx.fillStyle = '#0B1020';
     ctx.fillRect(0, 0, w, h);
 
     const ground = h * 0.75;

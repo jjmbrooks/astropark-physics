@@ -123,7 +123,7 @@ export function mountOrbitHop(container) {
     const cy = h / 2;
     const R = Math.min(w, h) * 0.5;
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = flash > 0 ? '#0a1810' : flash < 0 ? '#180a10' : '#070b16';
+    ctx.fillStyle = flash > 0 ? '#0a1810' : flash < 0 ? '#180a10' : '#0B1020';
     ctx.fillRect(0, 0, w, h);
 
     // planet
