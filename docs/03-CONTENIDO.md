@@ -7,7 +7,7 @@ Fuente de verdad para atracciones, fórmulas, simuladores y juegos. Un bot imple
 | # | Alien / marca | Concepto clave | Fórmulas / ideas | Enlace tip. Lab / Arcade |
 |---|---------------|----------------|------------------|---------------------------|
 | 1 | **Zorp** | MRU / inercia | \( v = \frac{\Delta x}{\Delta t} \) (constante); inercia = “seguir en línea recta si no hay fuerza neta” | Sim: Inercia de Zorp |
-| 2 | **Grog** | \( F = ma \) + trabajo | \( F = ma \); \( W = F \cdot d \) (1D, cos≈1) | Sim: Empuje de vagones |
+| 2 | **Grog** | \( F = ma \) + 3ª ley + trabajo | \( F = ma \); \( F_{12}=-F_{21} \); \( W = F \cdot d \) (1D) | Sims: Empuje de vagones + Par acción-reacción |
 | 3 | **Kiki** | Masa vs peso | \( m \) (kg) ≠ peso; peso \( P = mg \); \( g \) cambia por planeta | Sim: Balanza de planetas |
 | 4 | **Nebu** | Gravedad | Atracción; idea de \( g \); (opcional cualitativo) \( F_g \propto \frac{m_1 m_2}{r^2} \) | Sim: Caída en Xenon-9 |
 | 5 | **Tiki & Tok** | Kepler cualitativo | Órbitas; periodo vs radio (más lejos → más lento); sin derivar leyes formales en MVP | Arcade / visual órbita |
@@ -32,7 +32,7 @@ Fuente de verdad para atracciones, fórmulas, simuladores y juegos. Un bot imple
 
 - **Historia:** Kiki se pesa en Xenon-9 vs Tierra vs Luna; la **masa** no cambia, el **peso** sí.
 - **Objetivos:** \( P = mg \); \( g \) depende del cuerpo celeste; masa en kg, peso en N.
-- **Teoría UI:** tabla \( g \) aproximada — **Tierra 9.8**, **Luna 1.6**, **Xenon-9 = 7.5 m/s²** (ficticio, fijado), **Júpiter 24.8**. Documentado también en el sim de balanza.
+- **Teoría UI:** tabla \( g \) aproximada — **Tierra 9.8**, **Luna 1.6**, **Xenon-9 = 7.5 m/s²** (ficticio, fijado; etiquetar en UI como «dato ficticio»), **Júpiter 24.8**. Documentado también en el sim de balanza.
 - **Errores comunes:** “peso = masa”; usar kg como unidad de peso.
 
 #### 4. Nebu — Gravedad
@@ -59,6 +59,11 @@ IDs estables (usar en rutas y `localStorage`):
 | `sim-grog-empuje` | Empuje de vagones | Grog | Slider de \( F \) y \( m \); ver \( a \); desplazamiento → \( W \) | Llegar a \( a \) o \( W \) objetivo → 1–3★ |
 | `sim-kiki-balanza` | Balanza de planetas | Kiki | Elegir planeta (\( g \)); misma \( m \); mostrar peso | Emparejar masa/peso correctos en N quizzes → ★ |
 | `sim-nebu-caida` | Caída en Xenon-9 | Nebu | Caída libre 1D; opcional comparar dos \( g \) | Predecir tiempo/altura o igualar curvas → ★ |
+| `sim-par-accion-reaccion` | Par acción-reacción | Grog (+ Kiki) | Dos cuerpos se empujan; vectores \( F_{12}=-F_{21} \); \( a=F/m \) | Predicción + feedback informativo → 1–3★ |
+
+### Nota P1 / PF2 (F7)
+
+Cobertura del primer parcial (CNEYT V · Del Átomo al Universo): el gap crítico era **PF2 — tercera ley de Newton + vectores** (20% del parcial). El sim `sim-par-accion-reaccion` cierra ese gap. Xenon-9 \( g = 7.5 \) es **dato ficticio** (S4): etiquetado en UI de Kiki.
 
 **Notas de implementación (Canvas 2D):**
 

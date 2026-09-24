@@ -153,3 +153,12 @@ Paralelismo seguro: ver [`07-HANDOFF.md`](07-HANDOFF.md).
 **Codelius:** integra un solo repo; codea audio engine / animaciones críticas. Runica: slices mecánicos solo con perfil live + DoD claro.
 
 **DoD F7 (alto nivel):** Doc Aguilar aceptado + backlog en docs + vertical slice (1 atracción con art+audio+copy) en `main`.
+
+**Checklist integración (Codelius):**
+
+- [x] Pack arte P0 montado (bustos + hero + derivatives 256/640) + favicon/og
+- [x] Contraste `.btn-primary` + paleta canónica + canvas `#0B1020`
+- [x] Banner «Bienvenido a Xenon-9» + microcopy storyteller en atracciones
+- [x] Audio engine (mute default, unlock gesto, BGM/SFX) + assets melody
+- [x] M1 `sim-par-accion-reaccion` (PF2) + S4 etiqueta dato ficticio Xenon-9
+- [ ] M2–M6, S1–S3 (backlog restante; ver análisis Aguilar)
