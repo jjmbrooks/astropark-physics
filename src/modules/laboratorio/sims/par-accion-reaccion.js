@@ -3,18 +3,21 @@ import { playSuccess, playFail, playStar } from '../../../audio/engine.js';
 
 /**
  * sim-par-accion-reaccion — 3ª ley de Newton + vectores (PF2 / M1).
- * Grog y Kiki en hover-skates: fuerzas iguales y opuestas; a = F/m distinta si m distinta.
+ * Grog (izq) y Kiki (der) se empujan: fuerzas iguales y opuestas hacia AFUERA;
+ * a = F/m distinta si las masas difieren.
  * @param {HTMLElement} container
  * @returns {() => void}
  */
 export function mountParAccionReaccion(container) {
+  const base = import.meta.env.BASE_URL || '/';
+
   container.innerHTML = `
     <div class="sim-layout">
-      <div class="sim-canvas-wrap" style="min-width:360px">
+      <div class="sim-canvas-wrap sim-canvas-wrap--tall" style="min-width:360px;aspect-ratio:16/12;max-height:48vh">
         <canvas data-canvas aria-label="Par acción-reacción: Grog y Kiki se empujan"></canvas>
       </div>
       <div class="hud-stats">
-        <div class="hud-stat"><div class="hud-stat__label">F₁₂ = F₂₁</div><div class="hud-stat__value" data-f>20 N</div></div>
+        <div class="hud-stat"><div class="hud-stat__label">|F| (iguales)</div><div class="hud-stat__value" data-f>20 N</div></div>
         <div class="hud-stat"><div class="hud-stat__label">a₁ · a₂</div><div class="hud-stat__value" data-a>2.00 · 4.00 m/s²</div></div>
       </div>
       <div class="sim-controls">
@@ -44,7 +47,7 @@ export function mountParAccionReaccion(container) {
           <button type="button" class="btn btn-primary" data-push disabled>Empujar</button>
           <button type="button" class="btn btn-ghost" data-reset>Reiniciar</button>
         </div>
-        <p class="text-muted" data-hint>F₁₂ = −F₂₁ siempre. Las aceleraciones sí cambian con la masa: a = F/m.</p>
+        <p class="text-muted" data-hint>Las fuerzas del par son iguales. Lo que cambia con la masa es la aceleración: a = F/m.</p>
         <div class="stars-award" data-stars aria-live="polite"></div>
         <p class="theory-p theory-p--warn" data-feedback style="display:none"></p>
       </div>
@@ -63,6 +66,21 @@ export function mountParAccionReaccion(container) {
   const feedbackEl = container.querySelector('[data-feedback]');
   const pushBtn = container.querySelector('[data-push]');
   const predMsg = container.querySelector('[data-pred-msg]');
+
+  /** @type {HTMLImageElement} */
+  const imgGrog = new Image();
+  /** @type {HTMLImageElement} */
+  const imgKiki = new Image();
+  let grogReady = false;
+  let kikiReady = false;
+  imgGrog.onload = () => {
+    grogReady = true;
+  };
+  imgKiki.onload = () => {
+    kikiReady = true;
+  };
+  imgGrog.src = `${base}assets/aliens/busto-grog-256.webp`;
+  imgKiki.src = `${base}assets/aliens/busto-kiki-256.webp`;
 
   let F = 20;
   let m1 = 10;
@@ -102,19 +120,32 @@ export function mountParAccionReaccion(container) {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  function drawArrow(x0, y0, x1a, y1a, color, label) {
+  /**
+   * Flecha de x0→x1. Label debajo o encima según preferencia.
+   * @param {'above'|'below'} labelSide
+   */
+  function drawArrow(x0, y0, x1a, y1a, color, label, {
+    dashed = false,
+    lineWidth = 3,
+    labelSide = 'below',
+    canvasW = 360,
+    canvasH = 200,
+  } = {}) {
     const dx = x1a - x0;
     const dy = y1a - y0;
     const len = Math.hypot(dx, dy) || 1;
     const ux = dx / len;
     const uy = dy / len;
+    ctx.save();
     ctx.strokeStyle = color;
     ctx.fillStyle = color;
-    ctx.lineWidth = 3;
+    ctx.lineWidth = lineWidth;
+    if (dashed) ctx.setLineDash([5, 4]);
     ctx.beginPath();
     ctx.moveTo(x0, y0);
     ctx.lineTo(x1a, y1a);
     ctx.stroke();
+    ctx.setLineDash([]);
     const ah = 8;
     ctx.beginPath();
     ctx.moveTo(x1a, y1a);
@@ -122,29 +153,82 @@ export function mountParAccionReaccion(container) {
     ctx.lineTo(x1a - ux * ah + uy * ah * 0.5, y1a - uy * ah - ux * ah * 0.5);
     ctx.closePath();
     ctx.fill();
-    ctx.font = '11px sans-serif';
-    ctx.fillText(label, (x0 + x1a) / 2 - 18, y0 - 8);
+    if (label) {
+      ctx.font = '10px sans-serif';
+      const tw = ctx.measureText(label).width;
+      let lx;
+      let ly;
+      if (labelSide === 'tip-out') {
+        // etiqueta junto a la punta, hacia afuera (no arriba → sin clip superior)
+        lx = ux < 0 ? x1a - tw - 4 : x1a + 4;
+        ly = y0 + 4;
+      } else if (labelSide === 'above') {
+        lx = (x0 + x1a) / 2 - tw / 2;
+        ly = Math.max(12, y0 - 6);
+      } else {
+        lx = (x0 + x1a) / 2 - tw / 2;
+        ly = y0 + 14;
+      }
+      lx = Math.max(2, Math.min(canvasW - tw - 2, lx));
+      ly = Math.max(11, Math.min(canvasH - 4, ly));
+      ctx.fillText(label, lx, ly);
+    }
+    ctx.restore();
   }
 
-  function drawAlien(cx, cy, color, label, mass) {
-    const r = 14 + mass * 0.6;
+  function bodyRadius(mass) {
+    return Math.max(20, Math.min(30, 14 + mass * 0.9));
+  }
+
+  /**
+   * Busto recortado en círculo + hover-skate; fallback = círculo de color.
+   */
+  function drawAlien(cx, cy, color, label, mass, img, imgReady) {
+    const r = bodyRadius(mass);
+    ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.fillStyle = color;
-    ctx.fill();
-    ctx.fillStyle = '#0b1020';
+    ctx.closePath();
+    ctx.clip();
+    if (imgReady && img.complete && img.naturalWidth > 0) {
+      ctx.drawImage(img, cx - r, cy - r, r * 2, r * 2);
+    } else {
+      ctx.fillStyle = color;
+      ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+      ctx.fillStyle = '#0b1020';
+      ctx.beginPath();
+      ctx.arc(cx - r * 0.3, cy - r * 0.15, 3.5, 0, Math.PI * 2);
+      ctx.arc(cx + r * 0.3, cy - r * 0.15, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+
+    // ring
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.arc(cx - r * 0.3, cy - r * 0.2, 3, 0, Math.PI * 2);
-    ctx.arc(cx + r * 0.3, cy - r * 0.2, 3, 0, Math.PI * 2);
-    ctx.fill();
-    // skate
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // hover-skate
     ctx.fillStyle = '#4CC9F0';
-    ctx.fillRect(cx - r - 4, cy + r - 2, r * 2 + 8, 5);
+    ctx.shadowColor = 'rgba(76,201,240,0.55)';
+    ctx.shadowBlur = 6;
+    ctx.fillRect(cx - r - 6, cy + r - 3, r * 2 + 12, 7);
+    ctx.shadowBlur = 0;
+
+    // name + mass under body (nunca arriba → sin clip)
     ctx.fillStyle = '#e8ecf8';
-    ctx.font = '11px sans-serif';
-    ctx.fillText(label, cx - 14, cy + r + 16);
+    ctx.font = 'bold 11px sans-serif';
+    const nameW = ctx.measureText(label).width;
+    ctx.fillText(label, cx - nameW / 2, cy + r + 18);
     ctx.fillStyle = '#9aa3c0';
-    ctx.fillText(`m=${mass} kg`, cx - 20, cy + r + 28);
+    ctx.font = '10px sans-serif';
+    const massLabel = `m=${mass} kg`;
+    const mw = ctx.measureText(massLabel).width;
+    ctx.fillText(massLabel, cx - mw / 2, cy + r + 30);
+
+    return r;
   }
 
   function draw() {
@@ -157,12 +241,13 @@ export function mountParAccionReaccion(container) {
     // starfield
     ctx.fillStyle = 'rgba(232,236,248,0.35)';
     for (let i = 0; i < 28; i++) {
-      const sx = ((i * 97) % w);
-      const sy = ((i * 53) % (h * 0.55));
+      const sx = (i * 97) % w;
+      const sy = 12 + ((i * 53) % Math.max(1, h * 0.4));
       ctx.fillRect(sx, sy, 1.5, 1.5);
     }
 
-    const ground = h * 0.72;
+    // ground leaves room under bodies for name/mass; top margin for force arrows
+    const ground = h * 0.82;
     ctx.strokeStyle = '#2a3555';
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -171,31 +256,64 @@ export function mountParAccionReaccion(container) {
     ctx.stroke();
 
     const mid = w * 0.5;
-    const scale = Math.min(18, (w - 80) / 40);
-    const base1 = mid - 70;
-    const base2 = mid + 70;
+    const scale = Math.min(12, (w - 110) / 40);
+    // inset so outward arrows + tip labels fit at 360px
+    const inset = 88;
+    const base1 = Math.max(inset, mid - 72);
+    const base2 = Math.min(w - inset, mid + 72);
     const gX = base1 - x1 * scale;
     const kX = base2 + x2 * scale;
-    const cy = ground - 28;
+    const cy = ground - 48;
 
-    drawAlien(gX, cy, '#FF8C42', 'Grog', m1);
-    drawAlien(kX, cy, '#FFD93D', 'Kiki', m2);
+    const r1 = drawAlien(gX, cy, '#FF8C42', 'Grog', m1, imgGrog, grogReady);
+    const r2 = drawAlien(kX, cy, '#FFD93D', 'Kiki', m2, imgKiki, kikiReady);
 
-    // Equal-length opposite force arrows (same pixel length regardless of mass)
-    const arrowLen = Math.min(70, 20 + F * 1.2);
-    const ay = cy - 36;
-    drawArrow(gX + 18, ay, gX + 18 + arrowLen, ay, '#FF5DB1', `F₁₂=${F} N`);
-    drawArrow(kX - 18, ay, kX - 18 - arrowLen, ay, '#4CC9F0', `F₂₁=${F} N`);
+    // ——— Fuerzas del par: misma longitud, sentidos OPUESTOS hacia AFUERA ———
+    // Empujón: F sobre Grog (de Kiki) → izquierda; F sobre Kiki (de Grog) → derecha.
+    // F₁₂ = fuerza sobre 1 (Grog) por 2 (Kiki); F₂₁ = sobre 2 por 1.
+    // Fuerzas ancladas al borde del cuerpo, hacia AFUERA; etiqueta en la punta (tip-out)
+    const forceLen = Math.min(44, 16 + F * 0.75); // misma px para ambos
+    const fy = cy;
 
-    // a labels
-    ctx.fillStyle = '#B7F34C';
-    ctx.font = '12px sans-serif';
-    ctx.fillText(`a₁=${a1.toFixed(2)}`, gX - 24, cy - 52);
-    ctx.fillText(`a₂=${a2.toFixed(2)}`, kX - 24, cy - 52);
+    // Grog: desde borde izquierdo → IZQUIERDA (afuera)
+    drawArrow(gX - r1, fy, gX - r1 - forceLen, fy, '#FF5DB1', `F₁₂=${F}N`, {
+      labelSide: 'tip-out',
+      canvasW: w,
+      canvasH: h,
+    });
+    // Kiki: desde borde derecho → DERECHA (afuera)
+    drawArrow(kX + r2, fy, kX + r2 + forceLen, fy, '#4CC9F0', `F₂₁=${F}N`, {
+      labelSide: 'tip-out',
+      canvasW: w,
+      canvasH: h,
+    });
 
+    // Aceleraciones: lima dashed, largo ∝ a, misma dirección; etiqueta abajo del eje
+    const aScale = 6;
+    const aLen1 = Math.min(52, Math.max(12, a1 * aScale));
+    const aLen2 = Math.min(52, Math.max(12, a2 * aScale));
+    const ay = cy + 16;
+    drawArrow(gX - r1, ay, gX - r1 - aLen1, ay, '#B7F34C', `a₁=${a1.toFixed(1)}`, {
+      dashed: true,
+      lineWidth: 2,
+      labelSide: 'below',
+      canvasW: w,
+      canvasH: h,
+    });
+    drawArrow(kX + r2, ay, kX + r2 + aLen2, ay, '#B7F34C', `a₂=${a2.toFixed(1)}`, {
+      dashed: true,
+      lineWidth: 2,
+      labelSide: 'below',
+      canvasW: w,
+      canvasH: h,
+    });
+
+    // Leyenda (pie del canvas, sin clip)
     ctx.fillStyle = '#9aa3c0';
-    ctx.font = '11px sans-serif';
-    ctx.fillText('F₁₂ = −F₂₁  ·  a = F/m', mid - 70, h - 10);
+    ctx.font = '9px sans-serif';
+    const legend = 'F₁₂: sobre Grog (de Kiki) · F₂₁: sobre Kiki (de Grog) · mismas |F|';
+    const lw = ctx.measureText(legend).width;
+    ctx.fillText(legend, Math.max(4, mid - lw / 2), h - 6);
   }
 
   function tick(now) {
@@ -222,17 +340,18 @@ export function mountParAccionReaccion(container) {
   function explainPrediction() {
     const faster = m1 < m2 ? 'grog' : m2 < m1 ? 'kiki' : 'igual';
     let msg = '';
+    // Misconception a contradecir: “la fuerza es mayor sobre el más ligero” / “la fuerza mayor gana”
     if (prediction === 'igual') {
       msg =
-        'Casi: las fuerzas son iguales (3ª ley), pero la aceleración es a = F/m. Quien tenga menos masa acelera más. No gana “la fuerza mayor”: las dos fuerzas son la misma.';
+        'Casi: las fuerzas del par son iguales (misma longitud de flecha). No es que “haya más fuerza sobre el ligero”: lo que cambia es la aceleración, a = F/m. Quien tenga menos masa acelera más.';
       predictedOk = false;
-    } else if (prediction === faster || (faster === 'igual' && prediction === 'igual')) {
+    } else if (prediction === faster) {
       msg =
-        '¡Bien! F₁₂ = F₂₁ siempre. Quien tiene menos masa sale con mayor a = F/m. El error común “la fuerza mayor gana” no aplica: aquí las fuerzas son iguales.';
+        '¡Bien! F₁₂ = F₂₁ siempre (3ª ley). El error “la fuerza es mayor sobre el más ligero” es falso: las fuerzas son iguales; lo que cambia es a = F/m. Por eso el de menos masa sale más rápido.';
       predictedOk = true;
     } else {
       msg =
-        'Ojo: las fuerzas del par son iguales y opuestas (misma longitud de flecha). Acelera más quien tiene menos masa. “La fuerza mayor gana” es el error que hay que dejar atrás.';
+        'Ojo: no gana “quien recibe más fuerza”. En el par, las dos fuerzas son iguales y opuestas. Acelera más quien tiene menos masa (a = F/m). El mito “la fuerza es mayor sobre el más ligero” hay que dejarlo atrás.';
       predictedOk = false;
     }
     feedbackEl.style.display = 'block';
@@ -245,7 +364,6 @@ export function mountParAccionReaccion(container) {
     let stars = 1;
     if (predictedOk) stars = 2;
     if (predictedOk && Math.abs(m1 - m2) >= 3) stars = 3;
-    // Also require having seen unequal masses
     if (m1 === m2 && predictedOk) stars = Math.min(stars, 2);
 
     if (stars > awarded) {
